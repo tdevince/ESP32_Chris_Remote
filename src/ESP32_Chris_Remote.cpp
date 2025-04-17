@@ -104,7 +104,7 @@ WebServer server(80);
 WiFiManager wifiManager;  //start wifiManager
 
 // Define bitmask for multiple GPIOs
-uint64_t bitmask = BUTTON_PIN_BITMASK(UpButton) | BUTTON_PIN_BITMASK(DownButton);
+uint64_t bitmask = BUTTON_PIN_BITMASK(DownButton) | BUTTON_PIN_BITMASK(UpButton);
 //RTC_DATA_ATTR int bootCount = 0; //RTC_DATA_ATTR is used to store data in RTC memory
 //RTC memory is retained over deep sleep and reboots
 
@@ -481,10 +481,10 @@ void drawStartPage()
     u8g2.clear();
     u8g2.clearBuffer();
     u8g2.setFont(u8g2_font_ncenB08_tr); // Set the font for text
-    u8g2.drawStr(0, 10, "IP Address:"); // Draw the formatted string at (0, 15)
-    u8g2.drawStr(0, 25, WiFi.localIP().toString().c_str()); // Draw the formatted string at (25, 10)
-    u8g2.drawStr(0, 40, "System Mode:"); // Draw the formatted string at (25, 10)
-    u8g2.drawStr(0, 55, "OTA Mode"); // Draw the formatted string at (25, 10)
+    u8g2.drawStr(10, 15, "IP Address:"); // Draw the formatted string at (0, 15)
+    u8g2.drawStr(10, 30, WiFi.localIP().toString().c_str()); // Draw the formatted string at (25, 10)
+    u8g2.drawStr(10, 45, "System Mode:"); // Draw the formatted string at (25, 10)
+    u8g2.drawStr(10, 60, "OTA Mode"); // Draw the formatted string at (25, 10)
     u8g2.sendBuffer(); // Send the buffer to the display
   } else {
     u8g2.setDrawColor(1); // Set the draw color to white  
@@ -492,8 +492,8 @@ void drawStartPage()
     u8g2.clear();
     u8g2.clearBuffer();
     u8g2.setFont(u8g2_font_ncenB08_tr); // Set the font for text
-    u8g2.drawStr(0, 10, "Waking...."); // Draw the formatted string at (0, 15)
-    u8g2.drawStr(0, 25, "Normal Mode"); // Draw the formatted string at (25, 10)
+    u8g2.drawStr(10, 15, "Waking...."); // Draw the formatted string at (0, 15)
+    u8g2.drawStr(10, 30, "Normal Mode"); // Draw the formatted string at (25, 10)
     u8g2.sendBuffer(); // Send the buffer to the display
     delay(1000);
     getControllerStatus();
@@ -537,31 +537,31 @@ void printCalPages(uint16_t PageNum)
       u8g2.clearBuffer();
       u8g2.clear();
       u8g2.setFont(u8g2_font_ncenB08_tr);
-      u8g2.drawStr(0,10,"Cal. Mode: Use Up or");
-      u8g2.drawStr(0,25,"Dwn to turn controller");
-      u8g2.drawStr(0,40,"to desired flow. Press");
-      u8g2.drawStr(0,55,"Up & Down to 'Enter'");
+      u8g2.drawStr(5,13,"Cal. Mode: Use Up or");
+      u8g2.drawStr(5,28,"Dwn to turn controller");
+      u8g2.drawStr(5,43,"to desired flow. Press");
+      u8g2.drawStr(5,58,"Up & Down to 'Enter'");
       u8g2.sendBuffer();
       EnterActive=true;  //Arm to allow Enter command
   } else if(PageNum>1 && PageNum<11){
     u8g2.clearBuffer();
     u8g2.clear();
     u8g2.setFont(u8g2_font_ncenB08_tr);
-    u8g2.drawStr(0,10,"Use Up/Dwn for");
+    u8g2.drawStr(5,13,"Use Up/Dwn for");
     uint16_t O2Target = (PageNum-2)+2;
     char buffer[15];
     snprintf(buffer, sizeof(buffer), "%d.0 L/min", O2Target);
-    u8g2.drawStr(20,25,buffer);
-    u8g2.drawStr(0,40,"Press Up & Down");
-    u8g2.drawStr(0,55,"to 'Enter'");
+    u8g2.drawStr(25,28,buffer);
+    u8g2.drawStr(5,43,"Press Up & Down");
+    u8g2.drawStr(5,58,"to 'Enter'");
     u8g2.sendBuffer();
     EnterActive=true;  //Arm to allow Enter command
   } else if(PageNum==11){
     u8g2.clearBuffer();
     u8g2.clear();
     u8g2.setFont(u8g2_font_ncenB08_tr);
-    u8g2.drawStr(0,10,"Cal. Successful");
-     u8g2.drawStr(0,30,"Saving Data...");
+    u8g2.drawStr(5,15,"Cal. Successful");
+     u8g2.drawStr(5,35,"Saving Data...");
     u8g2.sendBuffer();
     uint16_t index;
     for (int i=0;i<9;i++)
@@ -630,7 +630,7 @@ void drawBattery()
     const int batteryWidth = 25;  // Width of the battery
     const int batteryHeight = 12;   // Height of the battery
     const int batteryX = 90;        // X position of the battery
-    const int batteryY = 0;        // Y position of the battery
+    const int batteryY = 5;        // Y position of the battery
     // Draw the outer battery shape
     u8g2.drawFrame(batteryX, batteryY, batteryWidth, batteryHeight); // x, y, width, height
 
