@@ -12,6 +12,7 @@
 #include <Wire.h> // Include the Wire library for I2C communication
 #include <SPI.h>  // Include the SPI library for SPI communication
 #include<esp_now.h>
+#include "Definitions.h"
 
 /**WARNING*********************************************************
  * *******WARNING**************************************************
@@ -39,7 +40,6 @@ Only RTC IO can be used as a source for external wake
 source. They are pins: 0-21 for ESP32-S2
 
 */
-#define BUTTON_PIN_BITMASK(GPIO) (1ULL << GPIO)  // 2 ^ GPIO_NUMBER in hex needed for RTC IO
 #define UpButton              GPIO_NUM_13     // Only RTC IO are allowed for Wake - ESP32 Pin example
 #define DownButton              GPIO_NUM_14     // Only RTC IO are allowed for Wake - ESP32 Pin example
 #define CalButton              GPIO_NUM_18     // Calibration of the Controller
@@ -49,54 +49,7 @@ source. They are pins: 0-21 for ESP32-S2
 #define I2C_SDA 21 // SDA pin for ESP32
 #define I2C_SCL 19 // SCL pin for ESP32
 
-#define cmdUp 3  //Command from the remoe to go up one step
-#define cmdDown 4 //Command from the remote to go down one step
-#define cmdGoTo 5 //Command from the remote to go to a specific value
-#define cmdStatus 6  //command to send status to Remote
-
-//**Modes of operation variables */
-
-volatile bool OTAMode=false; // Flag to check if OTA mode is activated
-volatile bool updateOTA=false; // Flag to check if OTA update is needed
-volatile bool CalMode=false;
-volatile int8_t rssiVal;
-uint32_t LastOTAPress=0; // Last time the OTA button was pressed
-uint32_t PressInterval=500; // Interval to check for OTA button press
-uint32_t LastCalPress=0; // Last time the Cal button was pressed
-uint32_t LastDemandTime=0;// Last time up or down flow button pressed
-bool UpButtonPressed=false;
-bool DownButtonPressed=false;
-bool DemandButtonPressed=false;//An up or down demand button was pressed
-bool SleepPermmissive=false;//flag to allow to go to sleep
-uint32_t preMillis=0; //  Previous Millis, used to wait for ESP-NOW data
-uint32_t timeoutMillis=30000; //time to wait for new data once sent.
-uint32_t LastIdleTime=0; //Last time idle time was set
-uint32_t IdleInterval=15000;//Idle time before sleeping
-uint32_t LastEnterActive=0;
-uint32_t EnterDelayInterval=1000;
-uint8_t BattState=0;
-
-bool DeliverySuccess=false; // Flag to check if the data was delivered successfully
-bool NewData=false; //flag to check if we've recieved a new data command
-bool EnterActive=true; //flag to allow up and down buttons to activate and "Enter" command
-uint16_t CalPageNum=1; //current calibration page number
-
-uint16_t CalData[17]; //array to hold calibration data
-uint16_t CalDataInProcess[9];//array to hold the measured Cal. data before storing
-float O2Flow = 0.0; // Initial value of O2Flow
-float O2FlowLast = 0.0; // Last value of O2Flow
-unsigned long previousMillis = 0; // Store the last time O2Flow was updated
-const long interval = 1000; // Interval for updates (1 second)
-
 uint8_t ControllerAddress[]={0x68, 0xB6, 0xB3, 0x08, 0xD7, 0x6A}; //MAC address of Chris Controller
-
-struct DataStruct
-{
-  uint8_t cmdESP_Now;  //Command for ESP-NOW
-  uint16_t potADC; //ADC Value
-};
-
-DataStruct ControllerData={0,0}; //Data structure to hold data from the controller
 
 // Create an instance of the web server on port 80
 WebServer server(80);
@@ -111,18 +64,12 @@ uint64_t bitmask = BUTTON_PIN_BITMASK(DownButton) | BUTTON_PIN_BITMASK(UpButton)
 
 U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R2, /* reset=*/ U8X8_PIN_NONE);
 
-bool FirstDraw = true; // Flag to indicate if it's the first draw
-
 //Creates a varaible called peerInfo of the data structury type esp_now_peer_info_t to 
 //hold information about the peer
 esp_now_peer_info_t peerInfo; 
 
 /************WiFi Variables************** */
-//const char *ssid = "CenturyLink6441";
-//const char *password = "af8b8fadadea8a";
-//String ESPHostName="Salt_Monitor";
 String ESPHostName="Chris_Remote";
-bool WiFiExits = false;  // flag to see if we should have a WiFi connection
 
 /**
  * @brief start the LittleFS file system.  For first time, set FORMAT_LITTLEFS_IF_FAILED to true
@@ -219,7 +166,6 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
    memcpy(&ControllerData, incomingData, sizeof(ControllerData));
    Serial.print("Data Recieved: "); Serial.println(ControllerData.potADC);
    NewData=true;
-   rssiVal=WiFi.RSSI();
  }
  
 /**
@@ -346,7 +292,6 @@ if(!res)
 } else 
 {
   //if you get here you have connected to the WiFi    
-  WiFiExits=true;
   Serial.println("connected... :)");
 }   
 /*
