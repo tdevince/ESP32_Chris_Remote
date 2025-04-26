@@ -532,6 +532,7 @@ void printCalPages(uint16_t PageNum)
     LastIdleTime=millis();
     Serial.print("Cal Change millis = ");Serial.println(LastIdleTime);
     Serial.print("Current millis = ");Serial.println(millis());
+    ESP.restart();  //restarting will force the display to show current controller position
   } else if(PageNum==12){
     u8g2.clearBuffer();
     u8g2.clear();
