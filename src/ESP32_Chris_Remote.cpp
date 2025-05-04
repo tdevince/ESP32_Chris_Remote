@@ -72,6 +72,7 @@ void IRAM_ATTR CalButtonPress()
     LastCalPress=millis(); // Update the last press time
     LastIdleTime=LastCalPress;
     CalMode =!CalMode;
+    if (!CalMode){ESP.restart();} // Restart the ESP32 to abort changes
     FirstDraw=true;
   }
 }

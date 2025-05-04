@@ -14,6 +14,6 @@
 void prepareLittleFS(bool formatIfFailed);
 void initWiFi(const String& hostName, WiFiManager& wifiManager);
 void initOTA();
-void getFileData(); //test file to write and read from LittleFS
+void getFileData(); //function to write and read from LittleFS
 
 #endif // WIFI_OTA_HELPER_H
