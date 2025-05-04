@@ -36,3 +36,5 @@ const long interval = 1000; // Interval for updates (1 second)
 bool FirstDraw = true; // Flag to indicate if it's the first draw
 
 DataStruct ControllerData={0,0}; //Data structure to hold data from the controller
+
+

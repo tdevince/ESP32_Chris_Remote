@@ -11,4 +11,6 @@ void SendData(DataStruct OutData);
 void initESP_NOW();
 void getControllerStatus();
 
+extern uint8_t ControllerAddress[6]; //MAC address of Chris Controller
+
 #endif // ESPNOW_FUNC_H

@@ -8,7 +8,7 @@
 //hold information about the peer
 esp_now_peer_info_t peerInfo; 
 
-uint8_t ControllerAddress[]={0x68, 0xB6, 0xB3, 0x08, 0xD7, 0x6A}; //MAC address of Chris Controller
+
 
 /**
  * @brief Fucntion called wihen new data is sent. This function simply prints 
@@ -71,7 +71,7 @@ void initESP_NOW()
   esp_now_init();  //initialize ESP-NOW
   esp_now_register_send_cb(OnDataSent); //register for Send Call back to get status of transmitted packet
   esp_now_register_recv_cb(OnDataRecv); //register call back function for when data is recieved
-  memcpy(peerInfo.peer_addr,ControllerAddress,sizeof(ControllerAddress));
+  memcpy(peerInfo.peer_addr, ControllerAddress, sizeof(ControllerAddress));
   peerInfo.channel=0;
   peerInfo.encrypt=false;
   esp_now_add_peer(&peerInfo);  //Add peer

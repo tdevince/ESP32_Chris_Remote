@@ -28,6 +28,14 @@ String ESPHostName="Chris_Remote";
 WebServer server(80); // Create an instance of the web server on port 80
 WiFiManager wifiManager;  //start wifiManager
 
+
+/*Controller MAC address.  Set this to the MAC address of the ESP32-S2_Solo-2 module used
+* in the Controller
+*/
+uint8_t ControllerAddress[6]={0x68, 0xB6, 0xB3, 0x09, 0x1C, 0x34}; //MAC address of Chris Controller, Test
+//uint8_t ControllerAddress[6] = {0x68, 0xB6, 0xB3, 0x08, 0xD7, 0x6A}; //MAC address of Chris Controller, production
+
+
 // Define bitmask for multiple GPIOs for RTC wakeup
 uint64_t bitmask = BUTTON_PIN_BITMASK(DownButton) | BUTTON_PIN_BITMASK(UpButton);
 //RTC_DATA_ATTR int bootCount = 0; //RTC_DATA_ATTR is used to store data in RTC memory

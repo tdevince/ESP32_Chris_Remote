@@ -36,12 +36,12 @@ source. They are pins: 0-21 for ESP32-S2
 #define cmdStatus 6  //command to send status to Remote
 
 
-
 //**Modes of operation variables */
 
 extern volatile bool OTAMode; // Flag to check if OTA mode is activated
 extern volatile bool updateOTA; // Flag to check if OTA update is needed
 extern volatile bool CalMode;
+
 
 //Timing variables
 extern uint32_t LastOTAPress; // Last time the OTA button was pressed
